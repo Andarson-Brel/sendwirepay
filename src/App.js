@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
-function App() {
+import Header from "./components/Navbar";
+import Home from "./pages/Home";
+import Loader from "./components/Loader";
+
+const App = () => {
+  const [showLoader, setShowLoader] = useState(true);
+  const [showAppBody, setShowAppBody] = useState(false);
+
+  useEffect(() => {
+    // Hide loader after 6 seconds
+    const timer = setTimeout(() => {
+      setShowLoader(false);
+      setShowAppBody(true);
+    }, 4000);
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Loader showLoader={showLoader} />
+      {showAppBody && (
+        <div className="App-body">
+          <Header />
+          <Home />
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
